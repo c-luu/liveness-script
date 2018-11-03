@@ -18,11 +18,13 @@ class Liveness():
         self._live_in = live_in
         self._live_out = live_out
 
-    # out_set : int -> (key: int, val: { string })
     def out_set(self, inst):
         return { inst : reduce(set.union, 
                                map(lambda k: self._live_in[k]
                                , self._succs[inst])) }
 
-    # in_set : int -> (key: int, val: { string })
+    def in_set(self, inst):
+        return { inst : self._live_out[inst]
+                            .difference(self._defs[inst])
+                            .union(self._uses[inst]) }
 
