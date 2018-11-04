@@ -2,12 +2,8 @@ import csv
 
 class Liveness():
     def __init__(self
-                 , succs = dict()
-                 , defs = dict()
-                 , uses = dict()
-                 , live_in = dict()
-                 , live_out = dict()
-                 , file_name = ''):
+                 , file_name = ''
+                 , blocks):
         self._INST_COL = 'inst'
         self._DEF_COL = 'def'
         self._USE_COL = 'use'
@@ -15,11 +11,12 @@ class Liveness():
         self._IN_COL = 'live_in'
         self._OUT_COL = 'live_out'
         self._instructions = []
-        self._succs = succs
-        self._defs = defs
-        self._uses = uses
-        self._live_in = live_in
-        self._live_out = live_out
+        self._blocks = blocks
+        self._succs = None
+        self._defs = None
+        self._uses = None
+        self._live_in = None
+        self._live_out = None
 
         if (file_name):
             self.load(file_name)
