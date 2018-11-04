@@ -33,8 +33,8 @@ class Liveness():
             for i in self._instructions:
                 pre_in_set = self._live_in.get(str(i), set())
                 pre_out_set = self._live_out.get(str(i), set())
-                self._live_in[str(i)] = self.in_set(i)
                 self._live_out[str(i)] = self.out_set(i)
+                self._live_in[str(i)] = self.in_set(i)
                 fix_point &= (pre_in_set == self._live_in.get(str(i), set())
                               and pre_out_set == self._live_out.get(str(i), set()))
         print('Fix-point reached in ' + str(iterations) + ' iterations.')
