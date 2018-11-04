@@ -7,7 +7,6 @@ class TestLiveness(unittest.TestCase):
 
     def test_analyze(self):
         l = liveness.Liveness(file_name='ir.csv')
-        l.analyze()
         l.write('ir_out.csv')
 
 if __name__ == '__main__':

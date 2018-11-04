@@ -35,10 +35,9 @@ class Liveness():
                 pre_out_set = self._live_out.get(str(i), set())
                 self._live_in[str(i)] = self.in_set(i)
                 self._live_out[str(i)] = self.out_set(i)
-
                 fix_point &= (pre_in_set == self._live_in.get(str(i), set())
-                             and pre_out_set == self._live_out.get(str(i), set()))
-        print(iterations)
+                              and pre_out_set == self._live_out.get(str(i), set()))
+        print('Fix-point reached in ' + str(iterations) + ' iterations.')
 
 
     def out_set(self, inst):
@@ -59,6 +58,29 @@ class Liveness():
                 self._defs[record[self._INST_COL].strip()] = set(map(lambda s: s.strip(), record[self._DEF_COL].split(',')))
                 self._uses[record[self._INST_COL].strip()] = set(map(lambda s: s.strip(), record[self._USE_COL].split(',')))
 
+    def write(self, file_name):
+        self.analyze()
+        with open(file_name, 'w') as file:
+            writer = csv.DictWriter(file
+                                    , fieldnames = [self._INST_COL
+                                                   , self._DEF_COL
+                                                   , self._USE_COL
+                                                   , self._SUCC_COL
+                                                   , self._OUT_COL
+                                                   , self._IN_COL ])
+            writer.writeheader()
+            [writer.writerow({
+                self._INST_COL: str(i),
+                self._DEF_COL: self.printableSet(self._defs.get(str(i), set())),
+                self._USE_COL: self.printableSet(self._uses.get(str(i), set())),
+                self._SUCC_COL: self.printableSet(self._succs.get(str(i), set())),
+                self._OUT_COL: self.printableSet(self._live_out.get(str(i), set())),
+                self._IN_COL: self.printableSet(self._live_in.get(str(i), set())),
+            }) for i in self._instructions]
+
+    def printableSet(self, s):
+        return ','.join(filter(None, list(s)))
+
     def show(self):
         print(map(lambda i: (str(i), self._live_in.get(str(i), set())), self._instructions))
         print(map(lambda i: (str(i), self._live_out.get(str(i), set())), self._instructions))
@@ -70,21 +92,3 @@ class Liveness():
         print(self._live_out)
         print(map(lambda i: (str(i), self._live_in.get(str(i), set())), self._instructions))
         print(map(lambda i: (str(i), self._live_out.get(str(i), set())), self._instructions))
-
-    def write(self, file_name):
-        with open(file_name, 'w') as file:
-            cols = [self._INST_COL, self._DEF_COL, self._USE_COL, self._SUCC_COL, self._OUT_COL, self._IN_COL ]
-            writer = csv.DictWriter(file, fieldnames= cols)
-            writer.writeheader()
-            [writer.writerow({
-                self._INST_COL: str(i),
-                self._DEF_COL: self.setToString(self._defs.get(str(i), set())),
-                self._USE_COL: self.setToString(self._uses.get(str(i), set())),
-                self._SUCC_COL: self.setToString(self._succs.get(str(i), set())),
-                self._OUT_COL: self.setToString(self._live_out.get(str(i), set())),
-                self._IN_COL: self.setToString(self._live_in.get(str(i), set())),
-            }) for i in self._instructions]
-
-    def setToString(self, s):
-        return ','.join(filter(None, list(s)))
-
