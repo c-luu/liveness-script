@@ -8,6 +8,12 @@ class Liveness():
                  , live_in = dict()
                  , live_out = dict()
                  , file_name = ''):
+        self._INST_COL = 'inst'
+        self._DEF_COL = 'def'
+        self._USE_COL = 'use'
+        self._SUCC_COL = 'succ'
+        self._IN_COL = 'live_in'
+        self._OUT_COL = 'live_out'
         self._instructions = []
         self._succs = succs
         self._defs = defs
@@ -32,7 +38,6 @@ class Liveness():
 
                 fix_point &= (pre_in_set == self._live_in.get(str(i), set())
                              and pre_out_set == self._live_out.get(str(i), set()))
-
         print(iterations)
 
 
@@ -49,18 +54,37 @@ class Liveness():
     def load(self, file_name):
         with open(file_name, 'rb') as ir:
             for record in csv.DictReader(ir):
-                self._instructions.append(int(record['inst']))
-                self._succs[record['inst'].strip()] = set(map(lambda s: s.strip(), record['succ'].split(',')))
-                self._defs[record['inst'].strip()] = set(map(lambda s: s.strip(), record['def'].split(',')))
-                self._uses[record['inst'].strip()] = set(map(lambda s: s.strip(), record['use'].split(',')))
+                self._instructions.append(int(record[self._INST_COL]))
+                self._succs[record[self._INST_COL].strip()] = set(map(lambda s: s.strip(), record[self._SUCC_COL].split(',')))
+                self._defs[record[self._INST_COL].strip()] = set(map(lambda s: s.strip(), record[self._DEF_COL].split(',')))
+                self._uses[record[self._INST_COL].strip()] = set(map(lambda s: s.strip(), record[self._USE_COL].split(',')))
 
     def show(self):
         print(map(lambda i: (str(i), self._live_in.get(str(i), set())), self._instructions))
-        '''
+        print(map(lambda i: (str(i), self._live_out.get(str(i), set())), self._instructions))
         print(self._instructions)
         print(self._succs)
         print(self._defs)
         print(self._uses)
         print(self._live_in)
         print(self._live_out)
-        '''
+        print(map(lambda i: (str(i), self._live_in.get(str(i), set())), self._instructions))
+        print(map(lambda i: (str(i), self._live_out.get(str(i), set())), self._instructions))
+
+    def write(self, file_name):
+        with open(file_name, 'w') as file:
+            cols = [self._INST_COL, self._DEF_COL, self._USE_COL, self._SUCC_COL, self._OUT_COL, self._IN_COL ]
+            writer = csv.DictWriter(file, fieldnames= cols)
+            writer.writeheader()
+            [writer.writerow({
+                self._INST_COL: str(i),
+                self._DEF_COL: self.setToString(self._defs.get(str(i), set())),
+                self._USE_COL: self.setToString(self._uses.get(str(i), set())),
+                self._SUCC_COL: self.setToString(self._succs.get(str(i), set())),
+                self._OUT_COL: self.setToString(self._live_out.get(str(i), set())),
+                self._IN_COL: self.setToString(self._live_in.get(str(i), set())),
+            }) for i in self._instructions]
+
+    def setToString(self, s):
+        return ','.join(filter(None, list(s)))
+

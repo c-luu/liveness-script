@@ -1,0 +1,8 @@
+inst,def,use,succ,live_out,live_in
+1,,c,"2,7","y,x,c,z,d","c,d,y,x,z"
+2,x,y,3,"x,c,z,d","y,c,z,d"
+3,y,z,4,"c,d,y,x,z","x,c,z,d"
+4,,d,"5,6",",c,d,y,x,z","c,d,y,x,z"
+5,x,"y,z",6,"y,x,c,d,",",c,d,y,z"
+6,z,,1,"c,d,y,x,z","y,x,c,d,"
+7,z,x,,,x
