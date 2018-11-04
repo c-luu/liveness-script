@@ -82,8 +82,6 @@ class Liveness():
         return ','.join(filter(None, list(s)))
 
     def show(self):
-        print(map(lambda i: (str(i), self._live_in.get(str(i), set())), self._instructions))
-        print(map(lambda i: (str(i), self._live_out.get(str(i), set())), self._instructions))
         print(self._instructions)
         print(self._succs)
         print(self._defs)
