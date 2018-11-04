@@ -5,15 +5,16 @@ class TestLiveness(unittest.TestCase):
     def setUp(self):
         pass
 
+    '''
     def test_out_set(self):
         # import pdb; pdb.set_trace()
 
         # arrange
-        succs = dict([ (0, { 0, 1}) ])
+        succs = dict([ ('0', { '0', '1'}) ])
         defs = []
         uses = []
-        live_in = dict([ (0, { 0 })
-                          , (1, { 1, 2 }) ])
+        live_in = dict([ ('0', { '0' })
+                          , ('1', { '1', '2' }) ])
         live_out = []
 
         l = liveness.Liveness(succs, defs, uses, live_in, live_out)
@@ -22,17 +23,17 @@ class TestLiveness(unittest.TestCase):
         result = l.out_set(0) 
 
         # assert
-        self.assertEqual(result, { 0: { 0, 1, 2 }})
+        self.assertEqual(result, { '0': { '0', '1', '2' }})
 
     def test_in_set(self):
         # import pdb; pdb.set_trace()
 
         # arrange
         succs = dict()
-        defs = dict([ (0, { 0 }) ])
-        uses = dict([ (0, { 1 }) ])
+        defs = dict([ ('0', { '0' }) ])
+        uses = dict([ ('0', { '1' }) ])
         live_in = dict()
-        live_out = dict([ (0, { 0 }) ])
+        live_out = dict([ ('0', { '0' }) ])
 
         l = liveness.Liveness(succs, defs, uses, live_in, live_out)
 
@@ -40,15 +41,13 @@ class TestLiveness(unittest.TestCase):
         result = l.in_set(0) 
 
         # assert
-        self.assertEqual(result, { 0: { 1 } })
+        self.assertEqual(result, { '0': { '1' } })
+    '''
 
     def test_print(self):
-        l = liveness.Liveness(dict()
-                                , dict()
-                                , dict()
-                                , dict()
-                                , dict())
-        l.load('ir.csv')
+        l = liveness.Liveness(file_name='test.csv')
+        l.analyze()
+        l.show()
 
 if __name__ == '__main__':
         unittest.main()
