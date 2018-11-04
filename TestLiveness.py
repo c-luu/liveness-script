@@ -42,5 +42,13 @@ class TestLiveness(unittest.TestCase):
         # assert
         self.assertEqual(result, { 0: { 1 } })
 
+    def test_print(self):
+        l = liveness.Liveness(dict()
+                                , dict()
+                                , dict()
+                                , dict()
+                                , dict())
+        l.load('ir.csv')
+
 if __name__ == '__main__':
         unittest.main()
