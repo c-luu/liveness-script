@@ -3,7 +3,8 @@ import csv
 class Liveness():
     def __init__(self
                  , file_name = ''
-                 , blocks):
+                 , blocks
+                 , flow_edges):
         self._INST_COL = 'inst'
         self._DEF_COL = 'def'
         self._USE_COL = 'use'
@@ -12,6 +13,7 @@ class Liveness():
         self._OUT_COL = 'live_out'
         self._instructions = []
         self._blocks = blocks
+        self._flow_edges = flow_edges
         self._succs = None
         self._defs = None
         self._uses = None
