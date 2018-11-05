@@ -51,7 +51,7 @@ class Liveness():
 
     # var -> block label -> def-use range
     def live_range(self, var, label):
-        # for each vs, 
+        # get insts where var is defined.
         pass
 
     def load(self, file_name):
