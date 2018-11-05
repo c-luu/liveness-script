@@ -49,6 +49,11 @@ class Liveness():
                              .difference(self._defs.get(str(inst), set())) \
                              .union(self._uses.get(str(inst), set()))
 
+    # var -> block label -> def-use range
+    def live_range(self, var, label):
+        # for each vs, 
+        pass
+
     def load(self, file_name):
         with open(file_name, 'rb') as ir:
             for record in csv.DictReader(ir):
